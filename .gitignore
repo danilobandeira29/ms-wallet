@@ -1,0 +1,5 @@
+.docker
+.idea
+wait-for-it.sh
+walletcore
+.env

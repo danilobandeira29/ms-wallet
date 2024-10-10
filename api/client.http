@@ -1,0 +1,27 @@
+POST http://localhost:8080/clients HTTP/1.1
+Content-Type: application/json
+
+{
+  "name": "Ana Banana",
+  "email": "ana2@banana.com"
+}
+####
+
+
+POST http://localhost:8080/accounts HTTP/1.1
+Content-Type: application/json
+
+{
+  "client_id": "fa6e9ef2-e385-4db8-ad8b-cf118f684946"
+}
+####
+
+
+POST http://localhost:8080/transactions HTTP/1.1
+Content-Type: application/json
+
+{
+  "account_id_from": "26508a9c-0618-490b-8330-7fc746e1abeb",
+  "account_id_to": "ec23586e-a35d-40ab-a4f5-aac150df0ef8",
+  "amount": 1
+}
