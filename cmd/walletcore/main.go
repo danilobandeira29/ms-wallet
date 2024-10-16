@@ -22,6 +22,35 @@ import (
 	"os"
 )
 
+const createClientsTable = `
+	create table if not exists clients(
+		id varchar(255) primary key, 
+		name varchar(255) not null, 
+		email varchar(255) not null, 
+		created_at date, 
+		updated_at date
+	)
+`
+const createAccountsTable = `
+	create table if not exists accounts(
+	    id varchar(255) primary key, 
+	    balance int not null, 
+	    client_id varchar(255),
+	    created_at date not null,
+	    updated_at date,
+	    foreign key (client_id) references clients(id) 
+	)`
+const createTransactionsTable = `
+	create table if not exists transactions(
+	    id varchar(255) primary key,
+	    account_from_id varchar(255), 
+	    account_to_id varchar(255), 
+	    amount int not null, 
+	    created_at date,
+	    foreign key (account_from_id) references accounts(id),
+	    foreign key (account_to_id) references accounts(id)
+	)`
+
 func main() {
 	err := godotenv.Load()
 	if err != nil {
@@ -37,6 +66,12 @@ func main() {
 			log.Printf("error when trying to close database's connection %v\n", err)
 		}
 	}(db)
+	for _, q := range []string{createClientsTable, createAccountsTable, createTransactionsTable} {
+		_, err := db.Exec(q)
+		if err != nil {
+			log.Fatalf("not possible to create table %v\n", err)
+		}
+	}
 	accountDb := database.NewAccountDB(db)
 	clientDb := database.NewClientDB(db)
 	createClientUseCase := createclient.NewCreateClientUseCase(clientDb)

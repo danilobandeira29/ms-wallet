@@ -22,10 +22,10 @@ type Output struct {
 }
 
 type BalanceUpdatedDto struct {
-	AccountIDFrom        string `json:"account_id_from"`
-	AccountIDTo          string `json:"account_id_to"`
-	BalanceAccountIDFrom int64  `json:"balance_account_id_from"`
-	BalanceAccountIDTo   int64  `json:"balance_account_id_to"`
+	AccountIDFrom      string `json:"account_id_from"`
+	AccountIDTo        string `json:"account_id_to"`
+	BalanceAccountFrom int64  `json:"balance_account_from"`
+	BalanceAccountTo   int64  `json:"balance_account_to"`
 }
 
 type UseCase struct {
@@ -80,8 +80,8 @@ func (u *UseCase) Execute(ctx context.Context, input Input) (*Output, error) {
 		output.Amount = transaction.Amount
 		balanceUpdatedDto.AccountIDFrom = transaction.AccountFrom.ID
 		balanceUpdatedDto.AccountIDTo = transaction.AccountTo.ID
-		balanceUpdatedDto.BalanceAccountIDFrom = accountFrom.BalanceInCents
-		balanceUpdatedDto.BalanceAccountIDTo = accountTo.BalanceInCents
+		balanceUpdatedDto.BalanceAccountFrom = accountFrom.BalanceInCents
+		balanceUpdatedDto.BalanceAccountTo = accountTo.BalanceInCents
 		return nil
 	})
 	if err != nil {

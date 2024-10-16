@@ -22,6 +22,27 @@ services:
       - .:/app
     depends_on:
       - mysql
+  balance:
+    image: danilobandeira/ms-wallet-balance:latest
+    platform: linux/amd64
+    command: [ "/usr/local/bin/wait-for-it.sh", "mysqlbalance:3306", "--timeout=60","--", "tail", "-f", "/dev/null" ]
+    environment:
+      BALANCE_MYSQL_PASSWORD: root
+      BALANCE_MYSQL_USER: root
+      BALANCE_MYSQL_PORT: 3306
+    ports:
+      - '8085:8080'
+  mysqlbalance:
+    image: mysql:8.0
+    platform: linux/amd64
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: balance
+      MYSQL_PASSWORD: root
+    ports:
+      - '3307:3306'
+    volumes:
+      - ../ms-wallet-balance/.docker/mysql:/var/lib/mysql
   zookeeper:
     image: confluentinc/cp-zookeeper:latest.arm64
     container_name: zookeeper
