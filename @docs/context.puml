@@ -1,0 +1,15 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+title "wallet"
+
+Person(user, "User", "Person who wants to create account or transfer money")
+System(ms_wallet_core, "Wallet System", "Wallet platform here user can create account and transfer money")
+System_Ext(kafka, "Kafka", "Message Broker")
+System_Ext(ms_balance, "Balance System", "Balance system shows user's balance")
+AddRelTag("topic", $textColor="orange", $lineColor="orange", $lineStyle = DashedLine())
+Rel(user,ms_wallet_core, "Create Account")
+Rel(user,ms_wallet_core, "Transfer To")
+Rel(ms_wallet_core,kafka, "Send transaction", "topic", $tags="topic")
+Rel(kafka,ms_balance, "Send transaction", "topic", $tags="topic")
+@enduml

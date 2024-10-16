@@ -1,5 +1,7 @@
 # ms-wallet
 
+![image](@docs/context.png)
+
 to run the project, start api
 
 ```shell
