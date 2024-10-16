@@ -15,7 +15,11 @@ services:
   goapp:
     build: .
     platform: linux/amd64
-    command: [ "./wait-for-it.sh", "mysql:3306", "--timeout=60","--", "tail", "-f", "/dev/null" ]
+    command: [ "/usr/local/bin/wait-for-it.sh", "mysql:3306", "--timeout=60", "--", "go", "run", "cmd/walletcore/main.go"]
+    environment:
+      MYSQL_USER: root
+      MYSQL_DATABASE: wallet
+      MYSQL_PASSWORD: root
     ports:
       - '8080:8080'
     volumes:
@@ -25,13 +29,13 @@ services:
   balance:
     image: danilobandeira/ms-wallet-balance:latest
     platform: linux/amd64
-    command: [ "/usr/local/bin/wait-for-it.sh", "mysqlbalance:3306", "--timeout=60","--", "tail", "-f", "/dev/null" ]
+    command: [ "/usr/local/bin/wait-for-it.sh", "mysqlbalance:3306", "--timeout=60", "--", "go", "run", "main.go"]
     environment:
       BALANCE_MYSQL_PASSWORD: root
       BALANCE_MYSQL_USER: root
       BALANCE_MYSQL_PORT: 3306
     ports:
-      - '8085:8080'
+      - '3003:8080'
   mysqlbalance:
     image: mysql:8.0
     platform: linux/amd64
